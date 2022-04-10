@@ -21,10 +21,15 @@ http://{{domain}}/api-docs/
 npm test
 ```
 ## Run project
+### ... with NPM
 ```bash
 npm start
 ```
-
+### ... with Docker
+```bash
+$ docker compose -f docker-compose.local.yml build
+$ docker compose -f docker-compose.local.yml up
+```
 ## env file
 ```
 NODE_ENV=dev
