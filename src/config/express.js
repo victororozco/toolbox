@@ -2,6 +2,7 @@
 import express from 'express';
 import helmet from 'helmet';
 import createRoutes from '../routes';
+import cors from 'cors'
 
 /**
 * Express instance
@@ -15,6 +16,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // secure apps by setting various HTTP headers
 app.use(helmet());
+
+app.use(cors({
+  origin: true,
+  credentials: true,
+}));
 
 // mount api version routes
 createRoutes(app);

@@ -8,6 +8,7 @@ const getAllFiles = () => new Promise(async (resolve, reject) => {
   try {
 
     let data = []
+    let dataError = []
     const delimiter = ','
     const { data: allData } = await axiosAPI().get(`/v1/secret/files`)
 
@@ -34,7 +35,7 @@ const getAllFiles = () => new Promise(async (resolve, reject) => {
               lines,
             })
           }).catch(err => {
-            data.push({
+            dataError.push({
               file: fileName,
               error: err?.response?.data,
             })
@@ -48,7 +49,8 @@ const getAllFiles = () => new Promise(async (resolve, reject) => {
     return resolve({
       status: 200,
       response: {
-        data
+        data,
+        dataError
       }
     })
 
