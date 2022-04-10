@@ -1,5 +1,6 @@
 # Toolbox
 
+## To DO
 - [X] Se deben llamar al listado de archivos /v1/secret/files
 - [X] Descargar cada file usando /v1/secret/file/{file} 
 - [X] Formatear la información en los CSV:  
@@ -8,3 +9,26 @@
   - [X] También pueden existir errores al descargar un archivo.
 - [X] Por cada archivo, se debe crear un objeto JSON que contenga las líneas válidas
 
+-----------------------------
+## OpenAPI Documentation
+
+```bash
+http://{{domain}}/api-docs/
+```
+
+## Run test
+```bash
+npm test
+```
+## Run project
+```bash
+npm start
+```
+
+## env file
+```
+NODE_ENV=dev
+PORT=3001
+TOOLBOX_URL=https://echo-serv.tbxnet.com
+TOOLBOX_PK=aSuperSecretKey
+```
