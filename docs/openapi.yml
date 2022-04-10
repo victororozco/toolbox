@@ -1,0 +1,154 @@
+openapi: 3.0.0
+
+info:
+  title: 'Toolbox API'
+  description: |
+    This API was designed based on the *Google's API Design Guide*.
+  version: v1
+  contact:
+    name: Victor Orozco
+    email: vorozco.dev@gmail.com
+  license:
+      name: 'Apache 2.0'
+      url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+
+servers:
+  - description: MockServer
+    url: https://{mockServer}.mock.pstmn.io
+    variables:
+      mockServer:
+        default: ''
+        description: Mock Server
+
+  - description: local
+    url: http://localhost:3001/api/{apiVersion}
+    variables:
+      apiVersion:
+        default: 'v1'
+        description: API Version
+
+paths:
+  /files/data:
+    get:
+      operationId: getAllFiles
+      summary: Get all files with data parsed
+      tags:
+        - Files
+      responses:
+        '200':
+          description: Get all files
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllFiles'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /files/{fileName}:
+    get:
+      operationId: getFileByName
+      summary: Get file by name
+      tags:
+          - Files
+      parameters:
+        - in: path
+          name: fileName
+          schema: 
+              type: string
+              pattern: "^([a-zA-Z0-9]{1,10}[.](csv))$"
+              example: "test2.csv"
+          required: true
+      responses:
+          '200':
+              description: Get file data by name
+              content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/FileData'
+          '401':
+            $ref: '#/components/responses/UnauthorizedError'
+          '404':
+            $ref: '#/components/responses/NotFoundError'
+          '500':
+            $ref: '#/components/responses/InternalError'
+  
+components:
+  responses:
+    InternalError:
+      description: Internal error
+      content:
+        application/json:
+          schema:
+              $ref: '#/components/schemas/Error'
+
+    UnauthorizedError:
+      description: 'Access token is missing or invalid'
+      content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    ForbiddenError:
+      description: Forbiden Operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    
+    NotFoundError:
+      description: Not found
+      content:
+        application/json:
+          schema:
+              $ref: '#/components/schemas/Error'
+
+  schemas:
+    Error:
+      type: object
+      required:
+        - message
+        - errorDetail
+        - messageWithCode
+      properties:
+        message:
+          type: string
+        errorDetail:
+          type: string
+        messageWithCode:
+          type: string
+
+    GetAllFiles:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileData'
+
+    FileData:
+      type: array
+      items:
+        type: object
+        properties:
+          file:
+            type: string
+            pattern: "^([a-zA-Z0-9]{1,10}[.](csv))$"
+            example: "test2.csv"
+          lines:
+            type: array
+            minItems: 2
+            items:
+              type: object
+              properties:
+                text:
+                  type: string
+                  example: pzDLVdilkbSjqxLdDNx
+                number:
+                  type: number
+                hex:
+                  type: string
+                  pattern: "^([0-9A-Fa-f]{32})"
